@@ -1,0 +1,36 @@
+html {
+  background: #ffffff; /* Old browsers */
+}
+
+div.scene { 
+  border-color: black;
+  border-style: solid;
+  padding: 10px;
+}
+
+div.script {
+  border-color: black;
+  overflow: scroll;
+  border-style: solid;
+  padding: 10px;
+}
+
+#box {
+  position: absolute;
+  z-index: 9;
+  background-color: #000000;
+  border: 1px solid #00ff0c;
+  color: #00ff0c;
+  padding: 5px;
+}
+
+#boxheader {
+  padding: 10px;
+  cursor: move;
+  z-index: 10;
+  background-color: #00ff0c;
+  color: #000;
+  max-width: 100%;
+}
+
+button.link { cursor: pointer;background:none;border:none; }
