@@ -23,9 +23,7 @@ class Room1 extends Room {
   }
   
   makeHouse() {
-    var geometry = new THREE.PlaneGeometry( 140, 80);
-    var material = new THREE.MeshBasicMaterial( {color: 0x8888ff, side: THREE.DoubleSide} );
-    var plane = new THREE.Mesh( geometry, material );
+    var plane = new Sprite('textures/farmhouse.jpg', 140, 80);
     plane.position.set(0, 60, -100);
     return plane;
   }
