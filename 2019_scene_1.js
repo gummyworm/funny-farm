@@ -10,13 +10,10 @@ class Room1 extends Room {
     const height = 10;
     const xStep = 50;
     const yStep = 50;
-    var geometry = new THREE.PlaneGeometry( xStep, xStep );
-    var material = new THREE.MeshBasicMaterial( {color: 0x888800, side: THREE.DoubleSide} );
     var group = new THREE.Group();
-
     for (var x = -width/2; x < width/2; x++) {
       for (var y = 0; y < height; y++) {
-        var plane = new THREE.Mesh( geometry, material );
+        var plane = new Sprite('textures/corn.png', xStep, yStep);
         plane.position.set( x*xStep, y*yStep/3, -yStep );
         plane.t = 0;
         group.add(plane);
