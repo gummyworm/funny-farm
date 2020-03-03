@@ -14,7 +14,7 @@ class Room1 extends Room {
     for (var x = -width/2; x < width/2; x++) {
       for (var y = 0; y < height; y++) {
         var plane = new Sprite('textures/corn.png', xStep, yStep);
-        plane.position.set( x*xStep, y*yStep/3, -yStep );
+        plane.position.set( x*xStep, y*yStep/16, -y*yStep );
         plane.t = 0;
         group.add(plane);
       }
@@ -26,7 +26,7 @@ class Room1 extends Room {
     var geometry = new THREE.PlaneGeometry( 140, 80);
     var material = new THREE.MeshBasicMaterial( {color: 0x8888ff, side: THREE.DoubleSide} );
     var plane = new THREE.Mesh( geometry, material );
-    plane.position.set(0, 100, 340);
+    plane.position.set(0, 60, -100);
     return plane;
   }
 
@@ -45,7 +45,7 @@ class Room1 extends Room {
   animField() {
     for (var i = 0; i < this.field.children.length; i++) {
       var plane = this.field.children[i];
-      plane.rotation.z = .5 * Math.sin(plane.t);
+      plane.rotation.z = .2 * Math.sin(plane.t) + .2 * Math.sin(plane.position.z/100);
       plane.t += .005;
     }
   }
