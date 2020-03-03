@@ -1,8 +1,6 @@
-class Plant extends Thing {
+class Plant extends Sprite {
   constructor() {
-    super(
-      new THREE.SphereGeometry( 25, 32, 32 ),
-      new THREE.MeshBasicMaterial( {color: 0x000000} ));
+    super('textures/corn.png', 25, 25);
   }
 }
 

@@ -117,7 +117,7 @@ class Thing extends THREE.Mesh {
   moveTo( target ) {
     const speed = 100;
     const dist = target.distanceTo(this.position);
-    var position = { x : 0, y: 300 };
+    var position = { x : this.position.x, y: this.position.y };
     var tween = new TWEEN.Tween(position).to(target, dist * speed )
       .onUpdate(function(){
         this.position.x = position.x;
@@ -128,8 +128,18 @@ class Thing extends THREE.Mesh {
 }
 
 class InteractableThing extends Thing {
-  constructor(filename, pos) {
-    super(filename, pos);
+  constructor(geom, material) {
+    super(geom, material);
+  }
+}
+
+class Sprite extends InteractableThing {
+  constructor(filename, w=50, h=50) {
+    super(new THREE.PlaneGeometry(w, h),
+      new THREE.MeshBasicMaterial({
+	map: new THREE.TextureLoader().load(filename)
+      })
+    );
   }
 }
 
