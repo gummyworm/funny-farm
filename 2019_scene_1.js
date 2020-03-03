@@ -23,7 +23,7 @@ class Room1 extends Room {
   }
   
   makeHouse() {
-    var plane = new Sprite('textures/farmhouse.jpg', 140, 80);
+    var plane = new Sprite('textures/farmhouse.png', 140, 80);
     plane.position.set(0, 60, -100);
     return plane;
   }
