@@ -137,7 +137,8 @@ class Sprite extends InteractableThing {
   constructor(filename, w=50, h=50) {
     super(new THREE.PlaneGeometry(w, h),
       new THREE.MeshBasicMaterial({
-	map: new THREE.TextureLoader().load(filename)
+	map: new THREE.TextureLoader().load(filename),
+	transparent: true
       })
     );
   }
