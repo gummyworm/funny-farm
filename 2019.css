@@ -5,7 +5,22 @@ html {
 div.scene { 
   border-color: black;
   border-style: solid;
-  padding: 10px;
+  padding: 5px;
+}
+
+div.scene { 
+  border-color: black;
+  border-style: solid;
+  padding: 5px;
+}
+
+div.inventory{ 
+  background-color: #4CAF50; /* Green background */
+  border: 1px solid green; /* Green border */
+  color: white; /* White text */
+  padding: 10px 24px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  float: left; /* Float the buttons side by side */
 }
 
 div.script {

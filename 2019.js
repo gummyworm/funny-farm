@@ -1,4 +1,4 @@
-var camera, scene, renderer, listener;
+var camera, renderer, listener;
 var room;
 var raycaster;
 const width = 400;
@@ -30,18 +30,9 @@ function init() {
 	canvas.onmouseclick = onMouseClick;
         canvas.setAttribute("border-style", "solid");
 
-	//setRoom(scene, new Room1());
-	var speech = new Script();
-	speech.setScript(`
-		#main
-		Hello World what is [this].
-		#this
-		Nothing special for damn sure.`);
-	speech.render(document.getElementById('script'));
 	raycaster = new THREE.Raycaster();
-
-	scene = new Room1(scene, camera);
-	console.log(scene.children);
+	field1 = new Field1(camera);
+	go(field1);
 }
 
 function onMouseMove( event ) {

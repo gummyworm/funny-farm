@@ -1,10 +1,22 @@
+var script;
+var inventory;
+var scene;
+var actors = [];
+var cam;
+var activeItem;
+
 class Room extends THREE.Scene {
-  constructor(scene, cam) {
+  constructor(camera) {
     super();
+    if (!camera) {
+      camera = cam;
+    }
+    cam = camera;
+    this.visited = false;
     this.background = new THREE.Color('white');
     this.add( new THREE.AmbientLight( 0x222222 ) );
     var light = new THREE.PointLight( 0xffffff );
-    light.position.copy( cam.position );
+    light.position.copy( camera.position );
     this.add( light );
   }
 
@@ -15,98 +27,32 @@ class Room extends THREE.Scene {
 }
 
 class Script {
-  render(parent) {
-    var div = this._div;
-    var word = "";
-    const line = this._lines[this._id];
-    if (!line) {
-      return;
-    }
-    for (var i = 0; i < line.text.length; i++) {
-      var c = line.text[i];
-      if (c === '[') {
-	if (word.length > 0) {
-          div.append(word);
-	  word = "";
-	}
-      } else if (c === ']') {
-        var b = document.createElement("button")
-        b.setAttribute('class', 'link');
-	var script = this;
-	b.onclick = function(e) {
-          script._id = b.innerHTML;
-	  script.render(parent);
-	  if (line.handler) {
-            line.handler();
-	  }
-          b.setAttribute("disabled", "disabled");
-	};
-	b.innerHTML = word;
-	div.append(b);
-	word = "";
-      } else {
-	word += c;
-      }
-    }
-    if (word.length > 0) {
-      div.append(word);
-    }
-    parent.appendChild(div);
-  }
-
   constructor(text) {
     this._div = document.createElement("div");
+    document.getElementById('script').appendChild(this._div);
     this._div.setAttribute("class", "script");
-    this._lines = {}; // map of ID's to text
-    this._options = new Set(); // set of ID's of conversation choices
-    this._id= "main";
-    this.addLine("main", text);
   }
 
-  addLine(id, text, handler = null) {
-    // add the conversation ID and its corresponding to text to line
-    this._lines[id] = {
-      text: text,
-      handler: handler,
-    };
+  print(text) {
+    this._div.append(text);
   }
 
-  setScript(text) {
-    var captureName = false;
-    var lineText = "";
-    var lineName = "";
-    console.log(text);
-    for (var i = 0; i < text.length; i++) {
-      var c = text[i];
-      if (c === "#") {
-	if (lineText.length > 0) {
-	  this.addLine(lineName, lineText);
-          console.log(lineName, lineText);
-	}
-	captureName = true;
-        lineName = "";
-        lineText = "";
-      } else if (captureName) {
-        if ((c == ' ') || (c == '\t') || (c == '\n')) {
-          captureName = false;
-	} else {
-	  lineName += c;
-	}
-      } else {
-        lineText += c;
+  option(text, handler) {
+    var b = document.createElement("button")
+    b.setAttribute('class', 'link');
+    b.onclick = function(e) {
+      if (handler) {
+        handler();
       }
-    }
-    console.log(lineName, lineText);
-    this.addLine(lineName, lineText);
+      b.setAttribute("disabled", "disabled");
+    };
+    b.innerHTML = text;
+    this._div.append(b);
+    console.log(word);
   }
 
-  setLine(id) {
-    this._id= id;
-  }
-
-  // get the text for the current point in the conversation
-  get line() {
-    return this._lines[this._id];
+  clear() {
+    this._div.innerHTML = "";
   }
 }
 
@@ -137,12 +83,22 @@ class Sprite extends InteractableThing {
   constructor(filename, w=50, h=50) {
     super(new THREE.PlaneGeometry(w, h),
       new THREE.MeshBasicMaterial({
-	map: new THREE.TextureLoader().load(filename),
-	transparent: true
+map: new THREE.TextureLoader().load(filename),
+transparent: true
       })
     );
   }
 }
+
+// set the 'contents' property to an array of the things that are in the container
+class Container extends Sprite {
+  constructor(filename, w=50, h=50) {
+    super(filename, w, h);
+  }
+  onClick() {
+  }
+}
+
 
 class Actor extends InteractableThing {
   constructor(filename, pos) {
@@ -150,3 +106,66 @@ class Actor extends InteractableThing {
   }
 }
 
+class Inventory {
+  // returns true if the inventory contains an item that is an instance of the given class
+  contains(item) {
+    return this._items.get(item.constructor.name) != null;
+  }
+
+  add(item) {
+    this._items.set(item.constructor.name, item);
+    var b = document.createElement("button")
+    b.setAttribute('class', 'link');
+    b.onclick = function(e) {
+      activeItem = item;
+    };
+    b.innerHTML = item.constructor.name;
+    this._div.append(b);
+  }
+
+  remove(item) {
+    var i = this._div.getElementById(item);
+    this._div.removeChild(i);
+    delete this._items.delete(item.constructor.name);
+  }
+
+  constructor() {
+    this._items = new Map();
+    this._div = document.createElement("div");
+    document.getElementById('inventory').appendChild(this._div);
+    this._div.setAttribute("class", "inventory");
+  }
+}
+
+function print(text) {
+  script.print(text);
+}
+function option(text, handler) {
+  script.option(text, handler);
+}
+function pause(handler) {
+  var done = false;
+  script.option("ok", handler);
+}
+function clear() {
+  script.clear();
+}
+function say(actor, msg, style) {
+  if (style) {
+    // TODO:
+    print(`${actor.constructor.name}: `+msg);
+  } else {
+    print(`${actor.constructor.name}: `+msg);
+  }
+}
+function go(room) {
+  clear();
+  if (!room.visited && room.onEnter) {
+    room.onEnter();
+  }
+  room.visited = true;
+  scene = room;
+}
+
+inventory = new Inventory();
+script = new Script();
