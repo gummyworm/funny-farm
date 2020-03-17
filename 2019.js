@@ -22,6 +22,9 @@ function init() {
         const fov = 75;
 	camera = new THREE.PerspectiveCamera( fov, width / height, .1, 1000 );
 	camera.position.set( 0, 0, 500 );
+        camera.aspect = canvas.clientWidth / height;
+	camera.updateProjectionMatrix();
+	
 	canvas.appendChild(renderer.domElement);
 	canvas.onmouseover = function(e) {
 		mouseIsOverCanvas = true;
