@@ -9,15 +9,19 @@ var mouseIsOverCanvas;
 var selected = [];
 
 function init() {
+	var canvas = document.getElementById('canvas');
+
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize( width, height );
+	var script = document.getElementById('script');
+	var inv = document.getElementById('inventory');
+	var height = window.innerHeight - inv.offsetHeight - script.offsetHeight;
+	renderer.setSize( canvas.clientWidth, height );
 
 	renderer.setClearColor(0x000000, 1.0);
         const fov = 75;
 	camera = new THREE.PerspectiveCamera( fov, width / height, .1, 1000 );
 	camera.position.set( 0, 0, 500 );
-	var canvas = document.getElementById('canvas');
 	canvas.appendChild(renderer.domElement);
 	canvas.onmouseover = function(e) {
 		mouseIsOverCanvas = true;
@@ -29,6 +33,7 @@ function init() {
 	canvas.onmousemove = onMouseMove;
 	canvas.onmouseclick = onMouseClick;
         canvas.setAttribute("border-style", "solid");
+
 
 	raycaster = new THREE.Raycaster();
 	field1 = new Field1(camera);
