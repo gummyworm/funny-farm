@@ -6,7 +6,7 @@ class Plant extends Sprite {
 
 class Field extends Room {
   makeField() {
-    const width = 40;
+    const width = 10;
     const height = 10;
     const xStep = 50;
     const yStep = 50;

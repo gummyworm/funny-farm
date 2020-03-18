@@ -21,7 +21,7 @@ function init() {
 	renderer.setClearColor(0x000000, 1.0);
         const fov = 75;
 	camera = new THREE.PerspectiveCamera( fov, width / height, .1, 1000 );
-	camera.position.set( 0, 0, 500 );
+	camera.position.set( 0, 0, 100 );
         camera.aspect = canvas.clientWidth / height;
 	camera.updateProjectionMatrix();
 	
